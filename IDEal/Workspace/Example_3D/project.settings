@@ -1,0 +1,23 @@
+package_1=com
+package_2=mantegral
+appName=Example_3D
+
+main="main.cpp"
+finalFlags="-O2 -DFINAL"
+SDLFlags="-lSDL2 -DBU_SDL"
+glfwFlags="-lglfw3 -lm"
+flags="$SDLFlags -DBU_APP_NAME=\"$appName\" -Wall -std=c++17"
+windowsSDLFlags="-lmingw32 -lSDL2main -lSDL2"
+ubuntuGLFlags="-lGL -ldl -lXinerama -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -lpthread -DBU_LINUX -DBU_DESKTOP"
+windowsGLFlags="-lopengl32 -lgdi32 -DBU_WINDOWS -DBU_DESKTOP"
+
+package_1=com
+package_2=mantegral
+appName=Example_3D
+
+main="main.cpp"
+finalFlags="-DFINAL"
+flags="Bibliotekum_Ultimatum/Binaries/SDL/libSDL2.a -DBU_SDL -DBU_APP_NAME=\"$appName\" -Wall -std=c++17"
+ubuntuGLFlags="-lGL -ldl -lXinerama -lXrandr -lXi -lXcursor -lX11 -lXxf86vm -lpthread -DBU_LINUX -DBU_DESKTOP"
+
+

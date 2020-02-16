@@ -1,0 +1,19 @@
+
+COMPILERS="../Compilers" #path to Compilers folder relative to projects main folder
+
+CPP=clang++ #path to c++ compiler for desktop compilation
+
+#paths for tools used to create android app
+
+AAPT="$COMPILERS/Sdk/build-tools/29.0.3/aapt"
+DX="$COMPILERS/Sdk/build-tools/29.0.3/dx"
+ZIPALIGN="$COMPILERS/Sdk/build-tools/29.0.3/zipalign"
+APKSIGNER="$COMPILERS/Sdk/build-tools/29.0.3/apksigner"
+PLATFORM="$COMPILERS/Sdk/platforms/android-26/android.jar"
+ADB="$COMPILERS/Sdk/platform-tools/adb"
+
+NDK_TOOLCHAINS="$COMPILERS/Sdk/ndk-bundle/toolchains/llvm/prebuilt/linux-x86_64/bin"
+
+
+JAVAC="$COMPILERS/JDK/java-8-oracle/bin/javac"
+
