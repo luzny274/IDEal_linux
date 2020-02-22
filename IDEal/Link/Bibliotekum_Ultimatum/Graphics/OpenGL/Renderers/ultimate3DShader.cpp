@@ -300,20 +300,28 @@ namespace ulm{
                                                 #if defined(ANIMATED) && !defined(INSTANCED) 
                                                     mat4 boneTransform = mat4(0.0);
 
+                                                    float allW = 0.0;
                                                     for(i = 0; i < 4; i++)
                                                     {
                                                         if(indices[i] == -1) break;
-                                                        else boneTransform += bones[indices[i]] *  weights[i] ;
+                                                        else boneTransform += bones[indices[i]] *  weights[i];
+                                                        allW += weights[i];
                                                     }
+
+                                                    boneTransform += mat4(1.0) * (1.0 - allW);
 
                                                 #elif defined(ANIMATED) && defined(INSTANCED)
                                                     mat4 boneTransform = mat4(0.0);
 
+                                                    float allW = 0.0;
                                                     for(i = 0; i < 4; i++)
                                                     {
                                                         if(indices[i] == -1) break;
                                                         else boneTransform += bone_buffer[gl_InstanceID * skeleton_size + indices[i]] * weights[i];
+                                                        allW += weights[i];
                                                     }
+
+                                                    boneTransform += mat4(1.0) * (1.0 - allW);
                                                 #endif
                                                 
 

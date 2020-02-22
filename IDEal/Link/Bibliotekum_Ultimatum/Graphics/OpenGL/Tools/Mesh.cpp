@@ -410,6 +410,7 @@ namespace ulm{
                 int success;
                 while(true){
                     success = fscanf(f, "%c", &c);
+
                     if(c != ' ' && c != '\n' && c != '\t' && c != '\"' && success != EOF)
                         word.append(c);
                     else
@@ -430,12 +431,16 @@ namespace ulm{
                 if(frames   != NULL)  *frames   = Array<Skeleton>();
                 if(mesh     != NULL)  *mesh     = Mesh();
 
+
                 Skeleton skeleton;
 
+                int nv = 0;
+                int vv = 0;
+
                 char c;
-                while(fscanf(f, "%c", &c) != EOF){
+                
+                while(!feof(f)){
                     String word = readWord(f);
-                    //if(!(word == "fm") && !(word == "frame")) printf("\n%s", word.getPtr());
 
                     if(word == "mesh" && mesh != NULL)
                     {           
@@ -465,39 +470,47 @@ namespace ulm{
                     }
                     else if((word == "vp" || word == "p") && mesh != NULL)
                     {         
-                //printf("\ntady2");
                         glm::vec3 pos;               
                         fscanf(f, "%f %f %f", &pos.x, &pos.y, &pos.z);
                         mesh->vertices.add(pos);
+                        vv++;
                     }
                     else if((word == "vt" || word == "t") && mesh != NULL)
                     {         
-                //printf("\ntady3");
                         glm::vec2 tex;               
                         fscanf(f, "%f %f", &tex.x, &tex.y);
                         mesh->texture_coordinates.add(tex);
                     }
                     else if((word == "vn" || word == "n") && mesh != NULL)
                     {         
-                //printf("\ntady4");
                         glm::vec3 normal;               
                         fscanf(f, "%f %f %f", &normal.x, &normal.y, &normal.z);
                         mesh->normals.add(normal);
+
+                        nv++;
                     }
                     else if((word == "vb" || word == "b") && mesh != NULL)
                     {         
-                //printf("\ntady5");
                         glm::ivec4 indices = glm::ivec4(-1);
                         glm::vec4 weights = glm::vec4(0.f);
+                        bool novyRadek = false;
+
+                        c = '\0';
                         for(int i = 0; i < 4; i++){
+                            if(c == '\n' || c == 'v') { 
+                                novyRadek = true; 
+                                break; 
+                            }
                             fscanf(f, "%d %f", &indices[i], &weights[i]);
                             fscanf(f, "%c", &c);
-                            if(c == '\n') break;
                         }
 
+                        while(c != '\n' && c != 'v' && !novyRadek)
+                            fscanf(f, "%c", &c);
 
                         mesh->joint_indices.add(indices);
                         mesh->joint_weights.add(weights);
+
                     }
                     else if(word == "fm" && mesh != NULL)
                     {         
@@ -510,6 +523,7 @@ namespace ulm{
                         Skeleton rig = skeleton;
                         for(int i = 0; i < rig.joints.size; i++){
                             while(c != ' ') fscanf(f, "%c", &c);
+                            
                             fscanf(f, "%f %f %f ",     &rig.joints[i].translation.x    , &rig.joints[i].translation.y  , &rig.joints[i].translation.z);
                             fscanf(f, "%f %f %f %f",   &rig.joints[i].rotation.x       , &rig.joints[i].rotation.y     , &rig.joints[i].rotation.z     , &rig.joints[i].rotation.w);
                             fscanf(f, "%c", &c);
@@ -521,24 +535,22 @@ namespace ulm{
                         frames->add(rig);
                     }
                 }
-                //printf("\ntady5");
 
                 Array<glm::mat4> inv = skeleton.toMatrices();
+
                 for(glm::mat4& mat : inv)
                     mat = glm::inverse(mat);
-                //printf("\ntady8");
 
-                for(int i = 0; i < mesh->properties.skeleton.joints.size; i++)
-                    mesh->properties.skeleton.joints[i].inverseDefault = inv[i];
-                ///printf("\ntady6");
+                if(mesh != NULL)
+                    for(int i = 0; i < mesh->properties.skeleton.joints.size; i++)
+                        mesh->properties.skeleton.joints[i].inverseDefault = inv[i];
 
-                for(Skeleton& s : *frames)
-                    for(int i = 0; i < s.joints.size; i++)
-                        s.joints[i].inverseDefault = inv[i];
+                if(frames != NULL)
+                    for(Skeleton& s : *frames)
+                        for(int i = 0; i < s.joints.size; i++)
+                            s.joints[i].inverseDefault = inv[i];
 
-                //printf("\n%d; %d; %d", mesh->vertices.size, mesh->indices.size, mesh->normals.size);
                 mesh->prepareFaceCulling();
-                //printf("\ntady7");
 
                 fclose(f);
             }

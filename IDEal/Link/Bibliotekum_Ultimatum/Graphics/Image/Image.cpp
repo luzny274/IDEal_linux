@@ -1,5 +1,5 @@
-#ifndef BU_IMAGE_CLASS_STB_BABIS
-#define BU_IMAGE_CLASS_STB_BABIS
+#ifndef BU_IMAGE_CLASS_STB
+#define BU_IMAGE_CLASS_STB
 
 #include "../../Base/base.hpp"
 #include "STB.h"

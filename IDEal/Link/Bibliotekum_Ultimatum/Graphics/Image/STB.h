@@ -1,6 +1,6 @@
 
-#ifndef STB_BABIS_BU
-#define STB_BABIS_BU
+#ifndef STB_BU
+#define STB_BU
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "STB/stb_image.h"
