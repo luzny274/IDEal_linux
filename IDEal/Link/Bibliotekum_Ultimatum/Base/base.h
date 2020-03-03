@@ -13,6 +13,6 @@
 #include <string.h>
 #include <assert.h>
 #include <limits.h>
-#include <pthread.h>
+//#include <pthread.h>
 
 #endif

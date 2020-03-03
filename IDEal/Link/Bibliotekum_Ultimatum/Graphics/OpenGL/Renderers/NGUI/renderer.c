@@ -120,7 +120,9 @@ nk_sdl_device_upload_atlas(const void *image, int width, int height)
 {
     ulm::Image font_image(4, width, height, (unsigned char *)image);
     struct nk_sdl_device *dev = &sdl.ogl;
-    dev->font_tex.initialize(font_image, false, ulm::NEAREST, true);
+    //dev->font_tex.initialize(font_image, false, ulm::NEAREST, true);
+
+    dev->font_tex.initialize(font_image, false, ulm::TEXTURE_ROUND_UP , ulm::NEAREST, true);
 
     /*
     struct nk_sdl_device *dev = &sdl.ogl;

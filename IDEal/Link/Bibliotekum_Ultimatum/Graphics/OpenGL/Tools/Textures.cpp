@@ -5,7 +5,7 @@
 #include "ToolsGL.hpp"
 
 namespace ulm{
-    //enum Tex_Round{TEXTURE_ROUND_NEAREST = 0, TEXTURE_ROUND_UP = 1, TEXTURE_ROUND_DOWN = 2};
+    enum Tex_Round{TEXTURE_ROUND_NEAREST = 0, TEXTURE_ROUND_UP = 1, TEXTURE_ROUND_DOWN = 2};
     enum Tex_Mode{NEAREST = 0, LINEAR = 1};
 
     class FrameBuffer;
@@ -30,17 +30,17 @@ namespace ulm{
 
             void initialize(const char * path, bool freeMemory){ image.load(path); initialize(freeMemory); }
             void initialize(const Image& arg_image, bool freeMemory){ image = arg_image; initialize(freeMemory); }
-            void initialize(bool freeMemory){initialize(false/*, TEXTURE_ROUND_UP*/, LINEAR, freeMemory);};
+            void initialize(bool freeMemory){initialize(false, TEXTURE_ROUND_UP, LINEAR, freeMemory);};
 
 
-            Texture(const char * path, bool mipmapping/*, Tex_Round roundMode*/, Tex_Mode texMode, bool freeMemory){initialize(path, mipmapping/*, roundMode*/, texMode, freeMemory);}
-            Texture(const Image& arg_image, bool mipmapping/*, Tex_Round roundMode*/, Tex_Mode texMode, bool freeMemory){initialize(arg_image, mipmapping/*, roundMode*/, texMode, freeMemory);}
+            Texture(const char * path, bool mipmapping, Tex_Round roundMode, Tex_Mode texMode, bool freeMemory){initialize(path, mipmapping, roundMode, texMode, freeMemory);}
+            Texture(const Image& arg_image, bool mipmapping, Tex_Round roundMode, Tex_Mode texMode, bool freeMemory){initialize(arg_image, mipmapping, roundMode, texMode, freeMemory);}
 
-            void initialize(const char * path, bool mipmapping/*, Tex_Round roundMode*/, Tex_Mode texMode, bool freeMemory){ image.load(path); initialize(mipmapping/*, roundMode*/, texMode, freeMemory); }
-            void initialize(const Image& arg_image, bool mipmapping/*, Tex_Round roundMode*/, Tex_Mode texMode, bool freeMemory){ image = arg_image; initialize(mipmapping/*, roundMode*/, texMode, freeMemory); }
-            void initialize(bool mipmapping/*, Tex_Round roundMode*/, Tex_Mode texMode, bool freeMemory);
+            void initialize(const char * path, bool mipmapping, Tex_Round roundMode, Tex_Mode texMode, bool freeMemory){ image.load(path); initialize(mipmapping, roundMode, texMode, freeMemory); }
+            void initialize(const Image& arg_image, bool mipmapping, Tex_Round roundMode, Tex_Mode texMode, bool freeMemory){ image = arg_image; initialize(mipmapping, roundMode, texMode, freeMemory); }
+            void initialize(bool mipmapping, Tex_Round roundMode, Tex_Mode texMode, bool freeMemory);
 
-            /*void round(Tex_Round roundMode){
+            void round(Tex_Round roundMode){
                 int newW = getNext2(image.width);
                 int newH = getNext2(image.height);
 
@@ -58,9 +58,8 @@ namespace ulm{
                     case TEXTURE_ROUND_UP:
                         break;
                 }
-
                 image.resize(newW, newH);
-            }//*/
+            }
 
             int getNext2(int puv){
                 unsigned int v = (unsigned int)puv;
@@ -233,14 +232,15 @@ namespace ulm{
     unsigned int *  TextureManager::textureIDs = NULL;
     int             TextureManager::current = -1;
 
-    void Texture::initialize(bool mipmapping/*, Tex_Round roundMode*/, Tex_Mode texMode, bool freeMemory){
+    void Texture::initialize(bool mipmapping, Tex_Round roundMode, Tex_Mode texMode, bool freeMemory){
         if(!initialized) glGenTextures(1, &id);
 
         TextureManager::use((int)id);
-        //glEnable(GL_TEXTURE_2D);
 
-        //originalSize = glm::ivec2(image.width, image.height);
-        //round(roundMode);
+        originalSize = glm::ivec2(image.width, image.height);
+
+        /* OpenGL likes textures with sides with length power of two */
+        round(roundMode);
         
 
         int numLevels = 1 + floor(log2((float)Math::max(image.width, image.height)));
