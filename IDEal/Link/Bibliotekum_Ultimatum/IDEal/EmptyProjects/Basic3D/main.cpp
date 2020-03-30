@@ -154,9 +154,9 @@ class Main : public ulm::Program{
 
         void resizeCallback(int width, int height){
             /* When resize */
-            ulm::NK::setSize(width, height);
-            cam3D.createPerspective(glm::radians(50.0f), (float)width / (float)height, 0.1f, 500.f);
-            gbuffer.initialize(width, height);
+            //ulm::NK::setSize(width, height);
+            //cam3D.createPerspective(glm::radians(50.0f), (float)width / (float)height, 0.1f, 500.f);
+            //gbuffer.initialize(width, height);
         }
 
         ~Main(){

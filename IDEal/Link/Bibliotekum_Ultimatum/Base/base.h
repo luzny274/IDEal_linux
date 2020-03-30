@@ -7,12 +7,10 @@
 #include <inttypes.h>
 #include <time.h>
 #include <math.h>
-#include <dirent.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
 #include <assert.h>
 #include <limits.h>
-//#include <pthread.h>
 
 #endif
